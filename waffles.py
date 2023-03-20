@@ -1,4 +1,4 @@
-from pancake import *
+from waffle import Waffle
 
 w1	= Waffle("fbouegiulsoomgeloemna",
                  "fugueolnlooseibmomega")
