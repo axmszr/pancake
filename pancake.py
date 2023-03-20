@@ -155,4 +155,4 @@ class Pancake:
         self.show_curr()
 
     def reset(self):
-        self.curr = self.init.copy()
+        self.curr = list(self.init)
