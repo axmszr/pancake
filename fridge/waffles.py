@@ -1,5 +1,5 @@
-from ..breakfast.waffle import Waffle
-from ..bakery.waffle_iron import WaffleIron
+from breakfast.waffle import Waffle
+from bakery.waffle_iron import WaffleIron
 
 w1	= Waffle("fbouegiulsoomgeloemna",
                  "fugueolnlooseibmomega")
