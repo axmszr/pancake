@@ -1,4 +1,4 @@
-from .iron import Iron
+from .iron import *
 
 class DeluxeIron(Iron):
     # 00 01 02 03 04 05 06
@@ -17,4 +17,5 @@ class DeluxeIron(Iron):
 
     def solve(self):
         super().solve(check_file(DeluxeIron.SIZE, DeluxeIron.FILE))
+        return super().verify_sols()
 
