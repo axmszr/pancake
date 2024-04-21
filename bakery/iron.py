@@ -62,7 +62,7 @@ class Iron:
 	
 	# rows and columns -> big string
 	def reduce(self, splits):
-		lst = [None for _ in range(self.size ** 2 - (size // 2) ** 2)]
+		lst = [None for _ in range(self.size ** 2 - (self.size // 2) ** 2)]
 		for j in range(len(self.indss)):
 			splist = splits[j]
 			inds = self.indss[j]
@@ -122,7 +122,7 @@ class Iron:
 		cols = self.oxidize(self.colours)
 		word_pools = [filter_by_colouring(new_pool, lets[i], cols[i]) for i in range(self.size + 1)]
 		
-		blank_guesses = ['_' * self.size for i in range(size + 1)]
+		blank_guesses = ['_' * self.size for i in range(self.size + 1)]
 		
 		self.rust(blank_guesses, word_pools)
 		
