@@ -1,5 +1,5 @@
 
-# Pool Filters
+# Letter Pool Stuff
 
 def get_letter_counts(word):
 	counts = {}
@@ -19,6 +19,9 @@ def subtract_letter_counts(alpha, beta):
 	for b in beta:
 		gamma[b] -= beta[b]
 	return gamma
+
+
+# Pool Filters
 
 def fits_in_pool(word, letter_pool):
 	counts = get_letter_counts(word)
@@ -63,6 +66,29 @@ def filter_by_green(word_pool, g, col):
         templist = [g[i] if col[i] == 'G' else '_' for i in range(len(g))]
         template = ''.join(templist)
         return filter_by_template(word_pool, template)
+
+
+# Colouring
+
+def colour(g, a):
+        l = len(g)
+        new_g = g.upper()
+        new_a = a.upper()
+
+        match = tuple(new_g[i] == new_a[i] for i in range(l))
+        remain = [new_a[i] for i in range(l) if not match[i]]
+
+        out = []
+        for i in range(l):
+            if match[i]:
+                out.append('G')
+            elif new_g[i] in remain:
+                out.append('Y')
+                remain.remove(new_g[i])
+            else:
+                out.append('R')
+
+        return ''.join(out)
 
 def R_to_U(col):
         U_list = ['_' if c == 'R' else c for c in col]

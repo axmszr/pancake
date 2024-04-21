@@ -1,5 +1,4 @@
 from .sieve import *
-from .law_school import Painter
 
 def check_file(L, filename):
 	with open(filename) as file:
@@ -128,12 +127,12 @@ class Iron:
 		return self.sols
 
 	# we don't rigorously use the colouring, so we might as well check
-	def verify_solutions(self):
+	def verify_sols(self):
 		lets = self.oxidize(self.tiles)
 
 		new_sols = []
 		for sol in self.sols:
-			sol_cols = [Painter.colour(lets[i], sol[i]) for i in range(self.size + 1)]
+			sol_cols = [colour(lets[i], sol[i]) for i in range(self.size + 1)]
 			
 			# need to turn R into _ to account for overlap
 			sol_cols = list(map(R_to_U, sol_cols))
@@ -142,4 +141,4 @@ class Iron:
 			if sol_colours == self.colours:
 				new_sols.append(sol)
 		self.sols = new_sols
-		return self.sols
+		return self.reduce(self.sols[0])
