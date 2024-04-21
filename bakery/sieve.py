@@ -1,9 +1,5 @@
-from .law_school import Painter
 
 # Pool Filters
-
-def filter_by_colouring(word_pool, g, col):
-	return tuple(filter(lambda word: Painter.is_match(g, word, col), word_pool))
 
 def get_letter_counts(word):
 	counts = {}
@@ -55,10 +51,23 @@ def filter_by_template(word_pool, template):
 def filter_by_shadow(word_pool, template, letter_pool):
 	new_pool = filter_by_template(word_pool, template)
 	
-	space = [i for i in range(len(tem)) if not template[i].isalpha()]
+	space = [i for i in range(len(template)) if not template[i].isalpha()]
 	output = []
-	for word in new_word:
+	for word in new_pool:
 		cut_word = ''.join(word[i] for i in space)
 		if fits_in_pool(cut_word, letter_pool):
 			output.append(word)
 	return tuple(output)
+
+def filter_by_green(word_pool, g, col):
+        templist = [g[i] if col[i] == 'G' else '_' for i in range(len(g))]
+        template = ''.join(templist)
+        return filter_by_template(word_pool, template)
+
+def R_to_U(col):
+        U_list = ['_' if c == 'R' else c for c in col]
+        return ''.join(U_list)
+
+def U_to_R(col):
+        R_list = ['R' if c == '_' else c for c in col]
+        return ''.join(R_list)
