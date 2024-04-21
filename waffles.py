@@ -47,3 +47,6 @@ w419    = Waffle("hameleeuoamivtoolyetr",
 
 w424    = Waffle("seuykareznuprnsthcasd",
                  "snucktsnazuresrahyped")
+
+w440    = Waffle("duirngudogfgednehnoee",
+                 "deignonuunfedgeghorde")
