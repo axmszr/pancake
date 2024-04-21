@@ -1,2 +1,2 @@
-from waffles import *
-from deluxes import *
+from breakfast.waffles import *
+from breakfast.deluxes import *
