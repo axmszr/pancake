@@ -9,10 +9,10 @@ class Deluxe(Pancake):
     # 29    30    31    32
     # 33 34 35 36 37 38 39
         
-    deluxe_size = 7
+    SIZE = 7
         
     def __init__(self, *strs):
-        super().__init__(Deluxe.deluxe_size, *strs)
+        super().__init__(Deluxe.SIZE, *strs)
 
     # Printers
     def show_template(tiles):

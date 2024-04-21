@@ -7,10 +7,10 @@ class Waffle(Pancake):
     # 13    14    15
     # 16 17 18 19 20
 
-    waffle_size = 5
+    SIZE = 5
 
     def __init__(self, *strs):
-        super().__init__(Waffle.waffle_size, *strs)
+        super().__init__(Waffle.SIZE, *strs)
 
         # Printers
     def show_template(tiles):
