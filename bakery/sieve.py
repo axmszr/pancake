@@ -2,7 +2,7 @@ from .law_school import Painter
 
 # Pool Filters
 
-def filter_by_colouring(word_cool, g, col):
+def filter_by_colouring(word_pool, g, col):
 	return tuple(filter(lambda word: Painter.is_match(g, word, col), word_pool))
 
 def get_letter_counts(word):
