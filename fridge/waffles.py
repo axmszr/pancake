@@ -1,10 +1,17 @@
-from .waffle import Waffle
+from ..breakfast.waffle import Waffle
+from ..bakery.waffle_iron import WaffleIron
 
 w1	= Waffle("fbouegiulsoomgeloemna",
                  "fugueolnlooseibmomega")
 
+W1      = WaffleIron("fbouegiulsoomgeloemna",
+                     "grrggrrrgygyyryrgyyrg")
+
 w2	= Waffle("scgolnndindeeriuffare",
                  "snarlnieundidfegforce")
+
+W2      = WaffleIron("scgolnndindeeriuffare",
+                     "grrrggryyggryryrgryyyg")
 
 w3	= Waffle("speedatptocirnempeiey",
                  "spendtmorecapieepiety")
