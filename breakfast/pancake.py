@@ -45,9 +45,10 @@ class Pancake:
                 return False
         return True
 
+    # outdated tech. we do multi-uniques now!
+    '''
     def get_unique_letters(self):
         count = {}
-
         for i in range(self.get_num_tiles()):
             if self.tile_solved(i):
                 continue
@@ -55,7 +56,6 @@ class Pancake:
             letter = self.curr[i]
             if letter not in count:
                 count[letter] = 0
-
             count[letter] += 1
 
         uniques = []
@@ -64,35 +64,12 @@ class Pancake:
                 uniques.append(letter)
 
         return uniques
+    '''
 
-    def queue_unique_moves(self):
+    # double swaps is always the shortest way to move
+    # both to their final position.
+    def queue_double_swaps(self):
         queue = self.get_queue()
-        
-        for u in self.get_unique_letters():
-            for i in range(self.get_num_tiles()):
-                if self.tile_solved(i):
-                    continue
-                if self.curr[i] == u:
-                    from_index = i
-                if self.soln[i] == u:
-                    to_index = i
-
-            queue.append((from_index, to_index, "Unique!"))
-
-    def next_move(self):
-        queue = self.get_queue()
-
-        while queue:
-            move = queue.pop()
-            if not (self.tile_solved(move[0]) and self.tile_solved(move[1])):
-                return move
-
-        print("Refilling queue...")
-        self.queue_unique_moves()
-        if queue:
-            return queue.pop()
-        
-        # double swaps are a little tough to be queued
         for i in range(self.get_num_tiles() - 1):
             curr_i = self.curr[i]
             soln_i = self.soln[i]
@@ -103,13 +80,10 @@ class Pancake:
 
                 if curr_i == curr_j:
                     continue
-                if soln_j == curr_i and \
-                        curr_j == soln_i:
-                    return (i, j, "Double Swap!")
+                if soln_j == curr_i and curr_j == soln_i:
+                    queue.append((i, j, "Double Swap"))
 
-        # all to one
-        # if all the As want to swap with Bs (not necessarily all),
-        # there is no change to the overall structure.
+    def get_many_to_ones(self):
         swap_to = {}
         for i in range(self.get_num_tiles()):
             if self.tile_solved(i):
@@ -120,26 +94,55 @@ class Pancake:
                 swap_to[right] = set()
             swap_to[right].add(wrong)
 
+        ones = []
         for right in swap_to:
             if len(swap_to[right]) > 1:
                 continue
-            wrong = tuple(swap_to[right])[0]
+            (wrong,) = swap_to[right]
+            ones.append((right, wrong))
+
+        return ones
+
+    # if all the As want to swap with Bs (not necessarily
+    # surjective), there is no change to the overall structure.
+    # this includes uniques swaps
+    def queue_unique_moves(self):
+        queue = self.get_queue()
+        ones = self.get_many_to_ones()
+        for right, wrong in ones:
             rights = []
             wrongs = []
             for i in range(self.get_num_tiles()):
                 if self.tile_solved(i):
                     continue
-                if self.curr[i] == wrong:
-                    wrongs.append(i)
                 if self.curr[i] == right:
                     rights.append(i)
-            for i in range(len(rights)):
-                queue.append((rights[i], wrongs[i], "Multi-Unique!"))
+                if self.curr[i] == wrong and self.soln[i] == right:
+                    wrongs.append(i)
+
+            if len(rights) == 1:
+                queue.append((rights[0], wrongs[0], "Unique"))
+            else:
+                for i in range(len(rights)):
+                    queue.append((rights[i], wrongs[i], "Multi-Unique"))
+
+    def next_move(self):
+        queue = self.get_queue()
+        while queue:
+            move = queue.pop()
+            if not (self.tile_solved(move[0]) or self.tile_solved(move[1])):
+                return move
+
+        self.queue_double_swaps()
+        if queue:
             return queue.pop()
         
-        # what else?
-        return ()
+        self.queue_unique_moves()
+        if queue:
+            return queue.pop()
 
+        raise Exception("Welp, need a new algo.")
+    
     def do_move(self, move):
         if not move:
             print("Empty move.")
@@ -150,16 +153,23 @@ class Pancake:
         self.curr[move[0]], self.curr[move[1]] = b, a
 
     # Printers
-    def stringify_tile(tile):
-        A_index = ord('A')
-        alpha = chr(A_index + tile // 5)
-        bet = str(tile % 5 + 1)
-        return alpha + bet
+    def stringify_tile(self, tile):
+        mod = 2 * self.get_size() - self.get_size() // 2
+        row = tile // mod * 2
+        col = tile % mod
+        if col >= self.get_size():
+            row += 1
+        if col >= self.get_size():
+            col = (col - self.get_size()) * 2
+        
+        alpha = chr(ord('A') + col)
+        bet = str(row + 1)
+        return f"{alpha}{bet} [{self.curr[tile]}]"
 
-    def stringify_move(move):
-        s1 = Pancake.stringify_tile(move[0])
-        s2 = Pancake.stringify_tile(move[1])
-        return f"({s1}, {s2}) {move[2]}"
+    def stringify_move(self, move):
+        s1 = self.stringify_tile(move[0])
+        s2 = self.stringify_tile(move[1])
+        return f"{s1} <-> {s2} : {move[2]}!"
 
     def show_template(tiles):
         print("Pancake is an abstract class; " + \
@@ -181,7 +191,7 @@ class Pancake:
     def show_tile_ref():
         print("Pancake is an abstract class; " + \
                 "show_tile_ref is not defined")
-       
+
     # Run
     def run(self):
         print()
@@ -195,7 +205,7 @@ class Pancake:
                 break
 
             num_moves += 1
-            print(f"{num_moves : >2}: {Pancake.stringify_move(move)}")
+            print(f"{num_moves : >2}: {self.stringify_move(move)}")
             self.do_move(move)
 
         if self.is_solved():
