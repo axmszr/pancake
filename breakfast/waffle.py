@@ -32,8 +32,8 @@ class Waffle(Pancake):
 
     def show_tile_ref():
         print("Tiles:\n" + \
-                "A1  B1  C1  D1  E1\n" + \
-                "A2      C2      E2\n" + \
-                "A3  B3  C3  D3  E3\n" + \
-                "A4      C4      E4\n" + \
-                "A5  B5  C5  D5  E5\n")
+                "A1  A2  A3  A4  A5\n" + \
+                "B1      B3      B5\n" + \
+                "C1  C2  C3  C4  C5\n" + \
+                "D1      D3      D5\n" + \
+                "E1  E1  E3  E4  E5\n")
