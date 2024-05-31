@@ -6,3 +6,6 @@ d42     = Deluxe("riterrrotonthancuerwneicspineulelvrteepn",
 
 d43     = Deluxe("reispoenlrpdsvelnpgnedittrueerodlesdeeio",
                  "grippedonoedeveloplilrintrudeeetsredness")
+
+d103    = Deluxe("maoeercmwalalauehrrtribtotnseytroesyrlsl",
+                 "closesthrteamateurmtrsbrownieeralroyally")
