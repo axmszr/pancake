@@ -169,6 +169,9 @@ class Pancake:
     def stringify_move(self, move):
         s1 = self.stringify_tile(move[0])
         s2 = self.stringify_tile(move[1])
+
+        if s2 < s1:
+            s1, s2 = s2, s1
         return f"{s1} <-> {s2} : {move[2]}!"
 
     def show_template(tiles):
