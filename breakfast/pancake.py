@@ -153,7 +153,7 @@ class Pancake:
         self.curr[move[0]], self.curr[move[1]] = b, a
 
     # Printers
-    def stringify_tile(self, tile):
+    def tile_id(self, tile):
         mod = 2 * self.get_size() - self.get_size() // 2
         row = tile // mod * 2
         col = tile % mod
@@ -162,9 +162,12 @@ class Pancake:
         if col >= self.get_size():
             col = (col - self.get_size()) * 2
         
-        alpha = chr(ord('A') + col)
-        bet = str(row + 1)
-        return f"{alpha}{bet} [{self.curr[tile]}]"
+        alpha = chr(ord('A') + row)
+        bet = str(col + 1)
+        return alpha + bet
+        
+    def stringify_tile(self, tile):
+        return f"{self.tile_id(tile)} [{self.curr[tile]}]"
 
     def stringify_move(self, move):
         s1 = self.stringify_tile(move[0])
@@ -196,27 +199,158 @@ class Pancake:
                 "show_tile_ref is not defined")
 
     # Run
-    def run(self):
-        print()
-        self.__class__.show_tile_ref()
-        print("Moves:")
+    def reset(self):
+        self.curr = list(self.init)
+    
+    def run_option(self, visual):     
+        if visual:
+            print()
+            self.__class__.show_tile_ref()
+            print("Moves:")
 
         num_moves = 0
+        moves = []
         while not self.is_solved():
             move = self.next_move()
             if not move:
                 break
 
             num_moves += 1
-            print(f"{num_moves : >2}: {self.stringify_move(move)}")
+            if visual:
+                print(f"{num_moves : >2}: {self.stringify_move(move)}")
             self.do_move(move)
+            moves.append(move)
+
+        if visual:
+            if self.is_solved():
+                print("\nDone! Here it is:")
+            else:
+                print("\nWe're stuck at:")
+            self.show_curr()
+
+        self.reset()
+        return moves
+    
+    def run(self):
+        self.run_option(True)
+
+    def get_solving_moves(self):
+        self.reset()
+        return self.run_option(False)
+
+    # sends to final position
+    # i.e. cycles via a hub
+    def run_flat_1(self):
+        moves = self.get_solving_moves()
+        labels = {i : i for i in range(self.num_tiles)}
+        for a, b, _ in moves[::-1]:
+            labels[a], labels[b] = labels[b], labels[a]
+        
+        print()
+        self.__class__.show_tile_ref()
+
+        num_hubs = 0
+        num_moves = 0
+
+        # ascending order
+        for l in labels:
+            r = labels[l]
+            if l == r:
+                continue
+
+            num_hubs += 1
+            print(f"Hub {num_hubs}: {self.tile_id(l)}")
+            while l != r:
+                num_moves += 1
+                r_str = self.stringify_tile(r)
+                print(f"{num_moves : >2}: [{self.curr[l]}] <-> {r_str}")
+                self.do_move((l, r, None))
+                labels[l], labels[r] = labels[r], labels[l]
+                r = labels[l]
+            print()
+
+        if self.is_solved():
+            print("Done! Here it is:")
+        else:
+            print("We're stuck at:")
+        self.show_curr()
+
+    # follows cycles
+    def run_flat_2(self):
+        moves = self.get_solving_moves()
+        labels = {i : i for i in range(self.num_tiles)}
+        for a, b, _ in moves:
+            labels[a], labels[b] = labels[b], labels[a]
+
+        print()
+        self.__class__.show_tile_ref()
+
+        num_moves = 0
+        num_cycles = 0
+        used = set()
+
+        # bubble swaps
+        for start in range(self.num_tiles):
+            if start in used or labels[start] == start:
+                continue
+
+            num_cycles += 1
+            print(f"Cycle {num_cycles} [{self.curr[start]}]")
+            print("    " + self.tile_id(start))
+            
+            a, b = start, labels[start]
+            while b != start:
+                num_moves += 1
+                used.add(b) # no need to log the cycle's root, smallest
+                b_str = self.stringify_tile(b)
+                print(f"{num_moves : >2}:    --> {b_str}")
+                self.do_move((a, b, None))
+                a, b = b, labels[b]
+            print()
+
+        if self.is_solved():
+            print("Done! Here it is:")
+        else:
+            print("We're stuck at:")
+        self.show_curr()
+
+    # receives final position
+    # haven't figured out how to implement due to changes
+    # possibly multiple iterations?
+    '''
+    def run_flat_3(self):
+        moves = self.run_option(False)
+        labels = {i : i for i in range(self.num_tiles)}
+        
+        for a, b, _ in moves[::-1]:
+            labels[a], labels[b] = labels[b], labels[a]
+
+        rev = {labels[i] : i for i in range(self.num_tiles)}
+
+        self.reset()
+        print()
+        self.__class__.show_tile_ref()
+        print("Moves:")
+
+        num_moves = 0
+
+        # still ascending order
+        for i in range(self.num_tiles):
+            j = rev[i]
+            if i == j:
+                continue
+            elif i > j:
+                i, j = j, i
+            num_moves += 1
+            s1 = self.stringify_tile(i)
+            s2 = self.stringify_tile(j)
+            print(f"{num_moves : >2}: {s1} <-> {s2}")
+            self.do_move((i, j, None))
+            rev[i], rev[j] = rev[j], rev[i]
 
         if self.is_solved():
             print("\nDone! Here it is:")
         else:
             print("\nWe're stuck at:")
-
         self.show_curr()
-
-    def reset(self):
-        self.curr = list(self.init)
+    '''
