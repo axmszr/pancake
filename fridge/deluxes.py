@@ -9,3 +9,6 @@ d43     = Deluxe("reispoenlrpdsvelnpgnedittrueerodlesdeeio",
 
 d103    = Deluxe("maoeercmwalalauehrrtribtotnseytroesyrlsl",
                  "closesthrteamateurmtrsbrownieeralroyally")
+
+d113    = Deluxe("ovamtcasaenstaaoptdrtraoieterhempoverdno",
+                 "phantomavroseaportsrtoaviatortceeamended")
