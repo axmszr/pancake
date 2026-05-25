@@ -11,8 +11,8 @@ class Deluxe(Pancake):
         
     SIZE = 7
         
-    def __init__(self, *strs):
-        super().__init__(Deluxe.SIZE, *strs)
+    def __init__(self, init, soln):
+        super().__init__(Deluxe.SIZE, init, soln)
 
     # Printers
     def show_template(tiles):
@@ -28,20 +28,20 @@ class Deluxe(Pancake):
 
     def show_index_ref():
         print("Tiles:\n" + \
-                "00  01  02  03  04  05  06\n" + \
-                "07      08      09      10\n" + \
-                "11  12  13  14  15  16  17\n" + \
-                "18      19      20      21\n" + \
-                "22  23  24  25  26  27  28\n" + \
-                "29      30      31      32\n" + \
-                "33  34  35  36  37  38  39\n")
+                "00 01 02 03 04 05 06\n" + \
+                "07    08    09    10\n" + \
+                "11 12 13 14 15 16 17\n" + \
+                "18    19    20    21\n" + \
+                "22 23 24 25 26 27 28\n" + \
+                "29    30    31    32\n" + \
+                "33 34 35 36 37 38 39\n")
 
     def show_tile_ref():
         print("Tiles:\n" + \
-                "A1  A2  A3  A4  A5  A6  A7\n" + \
-                "B1      B3      B5      B7\n" + \
-                "C1  C2  C3  C4  C5  C6  C7\n" + \
-                "D1      D3      D5      D7\n" + \
-                "E1  E2  E3  E4  E5  E6  E7\n" + \
-                "F1      F3      F5      F7\n" + \
-                "G1  G2  G3  G4  G5  G6  G7\n")
+                "A1 A2 A3 A4 A5 A6 A7\n" + \
+                "B1    B3    B5    B7\n" + \
+                "C1 C2 C3 C4 C5 C6 C7\n" + \
+                "D1    D3    D5    D7\n" + \
+                "E1 E2 E3 E4 E5 E6 E7\n" + \
+                "F1    F3    F5    F7\n" + \
+                "G1 G2 G3 G4 G5 G6 G7\n")

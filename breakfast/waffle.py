@@ -9,8 +9,8 @@ class Waffle(Pancake):
 
     SIZE = 5
 
-    def __init__(self, *strs):
-        super().__init__(Waffle.SIZE, *strs)
+    def __init__(self, init, soln):
+        super().__init__(Waffle.SIZE, init, soln)
 
         # Printers
     def show_template(tiles):
@@ -24,16 +24,16 @@ class Waffle(Pancake):
 
     def show_index_ref():
         print("Indices:\n" + \
-                "00  01  02  03  04\n" + \
-                "05      06      07\n" + \
-                "08  09  10  11  12\n" + \
-                "13      14      15\n" + \
-                "16  17  18  19  20\n")
+                "00 01 02 03 04\n" + \
+                "05    06    07\n" + \
+                "08 09 10 11 12\n" + \
+                "13    14    15\n" + \
+                "16 17 18 19 20\n")
 
     def show_tile_ref():
         print("Tiles:\n" + \
-                "A1  A2  A3  A4  A5\n" + \
-                "B1      B3      B5\n" + \
-                "C1  C2  C3  C4  C5\n" + \
-                "D1      D3      D5\n" + \
-                "E1  E1  E3  E4  E5\n")
+                "A1 A2 A3 A4 A5\n" + \
+                "B1    B3    B5\n" + \
+                "C1 C2 C3 C4 C5\n" + \
+                "D1    D3    D5\n" + \
+                "E1 E1 E3 E4 E5\n")

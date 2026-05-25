@@ -1,31 +1,25 @@
 
 class Pancake:
-    def __init__(self, size, *strs):
-        if not strs:
-            print("No inputs provided. Please try again.")
-            return
-
+    def __init__(self, size, init, soln):
         num_tiles = size ** 2 - (size // 2) ** 2
 
-        if len(strs[0]) != num_tiles:
-            print("Bad current input. Please try again.")
+        if len(init) != num_tiles:
+            print("Bad starting input. Please try again.")
+            return
+        if len(soln) != num_tiles:
+            print("Bad solution input. Please try again.")
             return
 
         self.size = size
         self.num_tiles = num_tiles
 
-        upper_init = strs[0].upper()
+        upper_init = init.upper()
         self.init = tuple(upper_init)
         self.curr = list(upper_init)
+
+        self.soln = tuple(soln.upper())
         
         self.move_queue = []
-
-        if len(strs) == 1:
-            self.soln = tuple(upper_init)
-        elif len(strs[1]) != num_tiles:
-            print("Bad solution input. Please try again.")
-        else:
-            self.soln = tuple(strs[1].upper())
 
     def get_size(self):
         return self.size
