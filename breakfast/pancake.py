@@ -2,7 +2,6 @@
 class Pancake:
     def __init__(self, size, init, soln):
         num_tiles = size ** 2 - (size // 2) ** 2
-
         if len(init) != num_tiles:
             print("Bad starting input. Please try again.")
             return

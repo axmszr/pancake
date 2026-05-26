@@ -11,7 +11,7 @@ w2	= Waffle("scgolnndindeeriuffare",
                  "snarlnieundidfegforce")
 
 W2      = WaffleIron("scgolnndindeeriuffare",
-                     "grrrggryyggryryrgryyyg")
+                     "grrrggryyggryryrgryyg")
 
 w3	= Waffle("speedatptocirnempeiey",
                  "spendtmorecapieepiety")
