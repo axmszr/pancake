@@ -67,8 +67,8 @@ class NumbleIron():
             return
 
         self.tiles = []
-        # so far pool not necessary but just in case
-        self.number_pool = {i : 0 for i in range(1, NumbleIron.SIZE+1)}
+        # so far pool not necessary
+        #self.number_pool = {i : 0 for i in range(1, NumbleIron.SIZE+1)}
         self.poss = {}
         for i in range(num_tiles):
             tile = int(tiles[i])
@@ -76,7 +76,7 @@ class NumbleIron():
                 self.tiles.append(tile)
             elif colours[i] == '0':
                 self.tiles.append(0)
-                self.number_pool[tile] += 1
+                #self.number_pool[tile] += 1
                 self.poss[i] = (1 << tile) | 1
             else:
                 print(f"Bad colour: {colours[i]}")
@@ -97,19 +97,22 @@ class NumbleIron():
         # check completed sums first
         for i in range(len(self.sums)):
             id1, id2, s = self.sums[i]
-            if self.tiles[id1] + self.tiles[id2] == 0:
+            tile1 = self.tiles[id1]
+            tile2 = self.tiles[id2]
+            if tile1 + tile2 == 0:
                 continue
             
-            if self.tiles[id1] != 0:
-                self.tiles[id2] = s - self.tiles[id1]
-                self.number_pool[self.tiles[id2]] -= 1
-                self.poss.pop(id2, None)
+            elif tile2 == 0: # tile1 != 0
+                self.tiles[id2] = s - tile1
+                #self.number_pool[s - tile1] -= 1
+                self.poss.pop(id2)
                 #print(f"Sum: [{id2}] -> {self.tiles[id2]}")
-            else:
-                self.tiles[id1] = s - self.tiles[id2]
-                self.number_pool[self.tiles[id1]] -= 1
-                self.poss.pop(id1, None)
+            elif tile1 == 0: # tile2 != 0
+                self.tiles[id1] = s - tile2
+                #self.number_pool[tile2] -= 1
+                self.poss.pop(id1)
                 #print(f"Sum: [{id1}] -> {self.tiles[id1]}")
+            
             self.sums = self.sums[:i] + self.sums[i+1:]
             return True            
 
@@ -122,7 +125,7 @@ class NumbleIron():
                 if i in self.poss:
                     self.poss[i] |= mask
 
-        # check sums
+        # check sum needs
         for id1, id2, s in self.sums:
             start = s - NumbleIron.SIZE
             if start < 1:
@@ -130,14 +133,20 @@ class NumbleIron():
             end = s - 1
             if end > NumbleIron.SIZE:
                 end = NumbleIron.SIZE
+            for x in range(1, start):
+                self.poss[id1] |= 1 << x
+                self.poss[id2] |= 1 << x
             for x in range(start, end + 1):
                 # if one tile cannot be x, the other cannot be s-x
                 if self.poss[id1] & (1 << x):
                     self.poss[id2] |= 1 << (s - x)
                 if self.poss[id2] & (1 << x):
                     self.poss[id1] |= 1 << (s - x)
-        '''
-        # check needs
+            for x in range(end + 1, NumbleIron.SIZE + 1):
+                self.poss[id1] |= 1 << x
+                self.poss[id2] |= 1 << x
+        
+        # check sudoku needs
         for inds in NumbleIron.INDSS:
             for x in range(1, NumbleIron.SIZE + 1):
                 found = False
@@ -156,14 +165,14 @@ class NumbleIron():
                 if found or not unique:
                     continue
                 self.poss[winner] = (1 << x) ^ (2 ** (NumbleIron.SIZE + 1) - 1)
-        '''
+        
         to_pop = []
         for i in self.poss:
             bility = self.poss[i] ^ (2 ** (NumbleIron.SIZE + 1) - 1)
             for x in range(1, NumbleIron.SIZE + 1):
                 if bility == 1 << x:
                     self.tiles[i] = x
-                    self.number_pool[x] -= 1
+                    #self.number_pool[x] -= 1
                     to_pop.append(i)
                     #print(f"Only: [{i}] -> {x}")
                     break
