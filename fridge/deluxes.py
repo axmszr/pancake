@@ -12,3 +12,6 @@ d103    = Deluxe("maoeercmwalalauehrrtribtotnseytroesyrlsl",
 
 d113    = Deluxe("ovamtcasaenstaaoptdrtraoieterhempoverdno",
                  "phantomavroseaportsrtoaviatortceeamended")
+
+d213    = Deluxe("eenhtnagnaealrfnpecvsdpsaaidtsgirenaigir",
+                 "fanaticlieharrangepvsspianistennedragged")
