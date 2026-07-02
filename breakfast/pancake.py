@@ -119,18 +119,65 @@ class Pancake:
                 for i in range(len(rights)):
                     queue.append((rights[i], wrongs[i], "Multi-Unique"))
 
-    def next_move(self):
+
+    def get_src_dst(self):
+        unsolved = tuple(i for i in range(self.get_num_tiles())
+                           if not self.tile_solved(i))
+        src_dst = {i : [] for i in unsolved}
+        for idx in range(len(unsolved) - 1):
+            i = unsolved[idx]
+            curr_i = self.curr[i]
+            soln_i = self.soln[i]
+
+            for jdx in range(idx+1, len(unsolved)):
+                j = unsolved[jdx]
+                curr_j = self.curr[j]
+                soln_j = self.soln[j]
+
+                if curr_i == soln_j:
+                    src_dst[i].append(j)
+                if curr_j == soln_i:
+                    src_dst[j].append(i)
+        return src_dst
+
+
+    def get_shortest_cycle(self, cycle_limit):
+        src_dst = self.get_src_dst()
+        paths = tuple((i,) for i in src_dst)
+        for _ in range(cycle_limit):
+            new_paths = []
+            for path in paths:
+                src = path[-1]
+                for dst in src_dst[src]:
+                    if dst == path[0]:
+                        return path
+                    new_paths.append(path + (dst,))
+            paths = tuple(new_paths)
+        raise Exception(f"No cycle found up to length {cycle_limit}.")
+        
+
+    def queue_cycle(self, cycle_limit):
+        cycle = self.get_shortest_cycle(cycle_limit)
+        queue = self.get_queue()
+        n = len(cycle)
+        tag = f"{n}-cycle"
+        for idx in range(n-1):
+            queue.append((cycle[idx], cycle[idx + 1], tag))
+        queue.append((cycle[-1], cycle[0], tag))
+        
+
+    def next_move(self, cycle_limit):
         queue = self.get_queue()
         while queue:
             move = queue.pop()
             if not (self.tile_solved(move[0]) or self.tile_solved(move[1])):
                 return move
-
-        self.queue_double_swaps()
-        if queue:
-            return queue.pop()
         
         self.queue_unique_moves()
+        if queue:
+            return queue.pop()
+
+        self.queue_cycle(cycle_limit)
         if queue:
             return queue.pop()
 
@@ -195,7 +242,7 @@ class Pancake:
     def reset(self):
         self.curr = list(self.init)
     
-    def run_option(self, visual):     
+    def run_option(self, visual, cycle_limit):     
         if visual:
             print()
             self.__class__.show_tile_ref()
@@ -204,7 +251,7 @@ class Pancake:
         num_moves = 0
         moves = []
         while not self.is_solved():
-            move = self.next_move()
+            move = self.next_move(cycle_limit)
             if not move:
                 break
 
@@ -224,8 +271,8 @@ class Pancake:
         self.reset()
         return moves
     
-    def run(self):
-        self.run_option(True)
+    def run(self, cycle_limit = 3):
+        self.run_option(True, cycle_limit)
 
     def get_solving_moves(self):
         self.reset()
