@@ -160,10 +160,8 @@ class Pancake:
         cycle = self.get_shortest_cycle(cycle_limit)
         queue = self.get_queue()
         n = len(cycle)
-        tag = f"{n}-cycle"
         for idx in range(n-1):
-            queue.append((cycle[idx], cycle[idx + 1], tag))
-        queue.append((cycle[-1], cycle[0], tag))
+            queue.append((cycle[idx+1], cycle[idx], f"{n}-cycle"))
         
 
     def next_move(self, cycle_limit):
